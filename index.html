@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipes & Pipe Fittings Standards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .pipe-card:hover {
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header with Essar Logo -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center">
+            <img src="https://www.essar.com/wp-content/themes/essar/images/essar-logo.svg" alt="Essar Logo" class="h-12">
+            <h1 class="text-2xl font-bold ml-4 text-gray-800">Pipe Standards & Fittings</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Search and Filter -->
+        <div class="mb-8">
+            <input type="text" id="searchInput" placeholder="Search pipes and fittings..." 
+                   class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-8">
+            <div class="flex space-x-4 border-b">
+                <button class="tab-btn active px-4 py-2 text-blue-600 border-b-2 border-blue-600" data-tab="pipes">Pipes</button>
+                <button class="tab-btn px-4 py-2 text-gray-600" data-tab="fittings">Fittings</button>
+            </div>
+        </div>
+
+        <!-- Pipes Section -->
+        <div id="pipes-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Pipe Cards will be inserted here by JavaScript -->
+        </div>
+
+        <!-- Fittings Section -->
+        <div id="fittings-content" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Fitting Cards will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        const pipesData = [
+            {
+                name: "Schedule 40 Steel Pipe",
+                image: "https://images.unsplash.com/photo-1635315619556-5f0981df1d56?auto=format&fit=crop&q=80",
+                dimensions: {
+                    "1/2\"": "21.3mm",
+                    "3/4\"": "26.7mm",
+                    "1\"": "33.4mm",
+                    "1-1/2\"": "48.3mm",
+                    "2\"": "60.3mm"
+                }
+            },
+            {
+                name: "Schedule 80 Steel Pipe",
+                image: "https://images.unsplash.com/photo-1518709414768-a88981a4515d?auto=format&fit=crop&q=80",
+                dimensions: {
+                    "1/2\"": "21.3mm",
+                    "3/4\"": "26.7mm",
+                    "1\"": "33.4mm",
+                    "1-1/2\"": "48.3mm",
+                    "2\"": "60.3mm"
+                }
+            }
+        ];
+
+        const fittingsData = [
+            {
+                name: "Flange",
+                image: "https://images.unsplash.com/photo-1617950956737-f818d085d95c?auto=format&fit=crop&q=80",
+                dimensions: {
+                    "1/2\"": "DN15",
+                    "3/4\"": "DN20",
+                    "1\"": "DN25",
+                    "1-1/2\"": "DN40",
+                    "2\"": "DN50"
+                }
+            },
+            {
+                name: "Reducer",
+                image: "https://images.unsplash.com/photo-1617950956737-f818d085d95c?auto=format&fit=crop&q=80",
+                dimensions: {
+                    "1/2\" × 3/4\"": "DN15 × DN20",
+                    "3/4\" × 1\"": "DN20 × DN25",
+                    "1\" × 1-1/2\"": "DN25 × DN40",
+                    "1-1/2\" × 2\"": "DN40 × DN50"
+                }
+            },
+            {
+                name: "Tee",
+                image: "https://images.unsplash.com/photo-1617950956737-f818d085d95c?auto=format&fit=crop&q=80",
+                dimensions: {
+                    "1/2\"": "DN15",
+                    "3/4\"": "DN20",
+                    "1\"": "DN25",
+                    "1-1/2\"": "DN40",
+                    "2\"": "DN50"
+                }
+            }
+        ];
+
+        function createCard(item) {
+            const card = document.createElement('div');
+            card.className = 'pipe-card bg-white rounded-lg shadow-md overflow-hidden';
+            
+            let dimensionsHTML = '';
+            for (const [size, mm] of Object.entries(item.dimensions)) {
+                dimensionsHTML += `
+                    <tr>
+                        <td class="py-1 px-2 border-b">${size}</td>
+                        <td class="py-1 px-2 border-b">${mm}</td>
+                    </tr>
+                `;
+            }
+
+            card.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold mb-4">${item.name}</h3>
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-left py-2">Size (inch)</th>
+                                <th class="text-left py-2">Size (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${dimensionsHTML}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            return card;
+        }
+
+        function renderContent(type) {
+            const container = document.getElementById(`${type}-content`);
+            container.innerHTML = '';
+            const data = type === 'pipes' ? pipesData : fittingsData;
+            data.forEach(item => {
+                container.appendChild(createCard(item));
+            });
+        }
+
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                    btn.classList.add('text-gray-600');
+                });
+                button.classList.add('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                
+                const tabName = button.getAttribute('data-tab');
+                document.getElementById('pipes-content').classList.toggle('hidden', tabName !== 'pipes');
+                document.getElementById('fittings-content').classList.toggle('hidden', tabName !== 'fittings');
+                
+                renderContent(tabName);
+            });
+        });
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+            const data = activeTab === 'pipes' ? pipesData : fittingsData;
+            
+            const filteredData = data.filter(item => 
+                item.name.toLowerCase().includes(searchTerm) ||
+                Object.entries(item.dimensions).some(([size, mm]) => 
+                    size.toLowerCase().includes(searchTerm) ||
+                    mm.toLowerCase().includes(searchTerm)
+                )
+            );
+
+            const container = document.getElementById(`${activeTab}-content`);
+            container.innerHTML = '';
+            filteredData.forEach(item => {
+                container.appendChild(createCard(item));
+            });
+        });
+
+        // Initial render
+        renderContent('pipes');
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
